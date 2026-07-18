@@ -1,4 +1,7 @@
 #include <Arduino.h>
+#include <WiFiClientSecure.h>
+#include <UniversalTelegramBot.h>
+#include <WebServer.h>
 
 bool isWebServerMode = false;
 WiFiClientSecure secured_client;
