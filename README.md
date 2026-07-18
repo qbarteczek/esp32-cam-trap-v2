@@ -23,5 +23,6 @@ Aby wgrać oprogramowanie, otwórz plik `src/esp32_cam_trap_v2/esp32_cam_trap_v2
 
 Jeśli urządzenie jest puste (brak wpisanych sieci), utworzy własną sieć **`ESP32-CAM-Config`** z hasłem `12345678`. Połącz się z nią i wejdź na `http://192.168.4.1`, aby skonfigurować swój dostęp.
 
-## Schemat podłączenia (wkrótce w docs/)
-Szczegóły podłączenia konwertera UART i czujnika ruchu PIR (na GPIO 13) zostaną dodane do katalogu `/docs`.
+## Schemat podłączenia
+Dokładny schemat podłączenia czujnika PIR, przycisku zmiany trybu, oraz informacje o wgrywaniu kodu (konwerter UART) znajdziesz w dokumencie: 
+👉 **[docs/wiring.md](docs/wiring.md)**
