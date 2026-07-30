@@ -1,28 +1,41 @@
-# ESP32-CAM Advanced Camera Trap V2
+# esp32-cam-trap-v2 🚀
 
-W pełni funkcjonalna, energooszczędna fotopułapka oparta o moduł **AI-Thinker ESP32-CAM**.
+Bilingual documentation for the **esp32-cam-trap-v2** project.  
+*Dwujęzyczna dokumentacja dla projektu esp32-cam-trap-v2.*
 
-## Funkcje projektu
-- 🔋 **Energooszczędność (Deep Sleep):** Pomiędzy zdjęciami moduł pobiera znikome ilości prądu i jest wybudzany sprzętowo przez czujnik ruchu (PIR).
-- 💾 **Zapis na kartę SD:** Każde zdjęcie jest zapisywane na lokalnej karcie pamięci (tryb 1-bit dla oszczędności pinów).
-- ⏱ **Czas rzeczywisty (NTP):** Pliki na karcie SD otrzymują prawidłową datę i godzinę (np. `2026-07-19_00-15-22.jpg`).
-- 📡 **Web Portal i Menedżer plików:** Możesz przeglądać zawartość karty SD przez Wi-Fi, łącząc się z IP kamery w trybie serwisowym.
-- ⚙️ **Konfiguracja w przeglądarce:** Sieć Wi-Fi oraz Token Telegrama możesz wpisać w interfejsie Web – zostaną zapisane w pamięci Flash, bez konieczności re-kompilacji kodu.
-- 🚀 **Aktualizacje bezprzewodowe (OTA):** Umożliwia wgranie nowego kodu prosto z Arduino IDE, gdy urządzenie znajduje się w sieci domowej.
-- 💬 **Dwukierunkowy Telegram:** Kamera wysyła zrobione zdjęcia na Twój telefon, po czym czeka kilka sekund na komendy zwrotne (np. `/live` aby uruchomić Web Server).
+---
 
-## Tryby pracy
-Przejście między trybami sterowane jest za pomocą pinu **GPIO 12**:
-1. **Tryb Aktywny (Fotopułapka)** – brak połączenia pinu 12. Moduł po wybudzeniu przez czujnik robi zdjęcie i ponownie usypia.
-2. **Tryb Serwisowy (Web Server / OTA)** – pin 12 zwarty z masą (GND) podczas włączania zasilania. Kamera uruchamia serwer na porcie 80, udostępniając pliki i panel konfiguracyjny.
+## 📁 Project Overview (O Projekcie)
+- **Microcontroller:** ESP32
+- **IDE Support:** Arduino IDE & VS Code PlatformIO
 
-## Uruchomienie (Kompilacja)
-Aby wgrać oprogramowanie, otwórz plik `src/esp32_cam_trap_v2/esp32_cam_trap_v2.ino` w Arduino IDE (lub użyj `arduino-cli`). Upewnij się, że masz doinstalowane biblioteki:
-- `UniversalTelegramBot`
-- `ArduinoJson`
+---
 
-Jeśli urządzenie jest puste (brak wpisanych sieci), utworzy własną sieć **`ESP32-CAM-Config`** z hasłem `12345678`. Połącz się z nią i wejdź na `http://192.168.4.1`, aby skonfigurować swój dostęp.
+## 🔌 Hardware Wiring (Połączenia Sprzętowe)
+For connection mappings, refer to:  
+*Rozkład pinów znajdziesz w:*  
+👉 **[WIRING.md](file://WIRING.md)**
 
-## Schemat podłączenia
-Dokładny schemat podłączenia czujnika PIR, przycisku zmiany trybu, oraz informacje o wgrywaniu kodu (konwerter UART) znajdziesz w dokumencie: 
-👉 **[docs/wiring.md](docs/wiring.md)**
+---
+
+## 🚀 How to Compile & Flash (Instrukcja Uruchomienia)
+
+### Method 1: VS Code PlatformIO (Recommended)
+1. Open this directory in VS Code with PlatformIO extension installed.
+2. Select your environment configuration.
+3. Click **Build & Upload**.
+
+### Method 2: Arduino IDE
+1. Open the `.ino` file in the sketch folder.
+2. Add support for ESP32 in Arduino Boards Manager.
+3. Install the libraries listed below.
+4. Upload to your board!
+
+### Required Libraries (Biblioteki):
+- `witnessmenow/UniversalTelegramBot`
+
+---
+## 🛑 Safety Rules (Zasady Bezpieczeństwa)
+Before connecting power, read:  
+*Przed podłączeniem zasilania przeczytaj:*  
+👉 **[DOS_AND_DONTS.md](file://DOS_AND_DONTS.md)**
