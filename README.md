@@ -1,28 +1,34 @@
-# ESP32-CAM Advanced Camera Trap V2
+# esp32-cam-trap-v2
 
-W pełni funkcjonalna, energooszczędna fotopułapka oparta o moduł **AI-Thinker ESP32-CAM**.
+Druga wersja ulepszonej fotopułapki z lepszym zarządzaniem energią i głębokim snem (deep sleep).
 
-## Funkcje projektu
-- 🔋 **Energooszczędność (Deep Sleep):** Pomiędzy zdjęciami moduł pobiera znikome ilości prądu i jest wybudzany sprzętowo przez czujnik ruchu (PIR).
-- 💾 **Zapis na kartę SD:** Każde zdjęcie jest zapisywane na lokalnej karcie pamięci (tryb 1-bit dla oszczędności pinów).
-- ⏱ **Czas rzeczywisty (NTP):** Pliki na karcie SD otrzymują prawidłową datę i godzinę (np. `2026-07-19_00-15-22.jpg`).
-- 📡 **Web Portal i Menedżer plików:** Możesz przeglądać zawartość karty SD przez Wi-Fi, łącząc się z IP kamery w trybie serwisowym.
-- ⚙️ **Konfiguracja w przeglądarce:** Sieć Wi-Fi oraz Token Telegrama możesz wpisać w interfejsie Web – zostaną zapisane w pamięci Flash, bez konieczności re-kompilacji kodu.
-- 🚀 **Aktualizacje bezprzewodowe (OTA):** Umożliwia wgranie nowego kodu prosto z Arduino IDE, gdy urządzenie znajduje się w sieci domowej.
-- 💬 **Dwukierunkowy Telegram:** Kamera wysyła zrobione zdjęcia na Twój telefon, po czym czeka kilka sekund na komendy zwrotne (np. `/live` aby uruchomić Web Server).
+## 📦 Lista Części (BOM)
+Aby złożyć to urządzenie od zera, potrzebujesz zakupić następujące elementy:
+- **Mikrokontroler:** Płytka ESP32 (np. WROOM-32 DevKit V1 lub ESP32-CAM)
+- **Główny osprzęt:** Kamera OV2640, PIR SR501, moduł zasilania awaryjnego
+- **Zasilanie:** 
+  - Ogniwo Li-Ion 18650 (np. z odzysku ze starych baterii laptopowych)
+  - Koszyk na pojedyncze ogniwo 18650 (tzw. Battery Holder 18650 x1)
+  - Moduł ładowania TP4056 (najlepiej w wersji z zabezpieczeniem, z wejściem USB-C)
+- **Inne:**
+  - Włącznik kołyskowy KCD11 (10x15mm)
+  - Przewody połączeniowe (zworki typu DuPont do testów na płytce stykowej, lub kabelki do lutowania 24AWG)
 
-## Tryby pracy
-Przejście między trybami sterowane jest za pomocą pinu **GPIO 12**:
-1. **Tryb Aktywny (Fotopułapka)** – brak połączenia pinu 12. Moduł po wybudzeniu przez czujnik robi zdjęcie i ponownie usypia.
-2. **Tryb Serwisowy (Web Server / OTA)** – pin 12 zwarty z masą (GND) podczas włączania zasilania. Kamera uruchamia serwer na porcie 80, udostępniając pliki i panel konfiguracyjny.
+## ⚡ Schemat Zasilania (Bateria 18650)
+Urządzenie jest przystosowane do pracy bezprzewodowej. Zasilanie opiera się na popularnym ogniwie 18650.
+1. Pola **B+** i **B-** na module TP4056 łączymy z plusem i minusem koszyka z ogniwem 18650.
+2. Pole **OUT+** z modułu TP4056 lutujemy do jednej nóżki przełącznika kołyskowego.
+3. Drugą nóżkę przełącznika łączymy z pinem **5V** lub **VIN** (w zależności od nazwy pinu na Twoim ESP32).
+4. Pole **OUT-** z modułu TP4056 łączymy bezpośrednio z pinem **GND** na ESP32.
+5. Moduły zasilamy zazwyczaj wyprowadzając pin **3.3V** z ESP32 do odpowiedniego złącza czujnika.
 
-## Uruchomienie (Kompilacja)
-Aby wgrać oprogramowanie, otwórz plik `src/esp32_cam_trap_v2/esp32_cam_trap_v2.ino` w Arduino IDE (lub użyj `arduino-cli`). Upewnij się, że masz doinstalowane biblioteki:
-- `UniversalTelegramBot`
-- `ArduinoJson`
+*Uwaga: Ładowanie baterii odbywa się poprzez podłączenie ładowarki od telefonu do gniazda USB modułu TP4056 (a NIE do gniazda na płycie ESP32!)*
 
-Jeśli urządzenie jest puste (brak wpisanych sieci), utworzy własną sieć **`ESP32-CAM-Config`** z hasłem `12345678`. Połącz się z nią i wejdź na `http://192.168.4.1`, aby skonfigurować swój dostęp.
+## 🚀 Jak złożyć i uruchomić?
+1. **Wgraj kod:** Jeśli nie masz wiedzy programistycznej, zajrzyj do katalogu `arduino_ide` i postępuj zgodnie z instrukcjami z tamtejszego pliku. W przeciwnym razie użyj PlatformIO, otwórz główny folder i wgraj oprogramowanie kablem USB.
+2. **Połącz elektronikę:** Skompletuj części z listy BOM, podłącz najpierw czujniki do ESP32 na tzw. "pająka" i przetestuj układ na biurku.
+3. **Wydrukuj obudowę:** Pobierz skrypt z katalogu `hardware/enclosure.scad`, otwórz go w darmowym programie OpenSCAD, wyeksportuj do pliku `.stl` (klawisz F6, potem F7) i wrzuć do swojego slicera (np. Cura / PrusaSlicer).
+4. **Montaż końcowy:** Umieść TP4056 tak, aby port USB wychodził przez dolny mały otwór. Wstaw baterię, umieść ESP32 w obudowie. Przewlecz kable włącznika przez boczny otwór, wciśnij włącznik.
 
-## Schemat podłączenia
-Dokładny schemat podłączenia czujnika PIR, przycisku zmiany trybu, oraz informacje o wgrywaniu kodu (konwerter UART) znajdziesz w dokumencie: 
-👉 **[docs/wiring.md](docs/wiring.md)**
+## 📊 Interpretacja danych
+Działa identycznie jak v1, ale bateria trzyma znacznie dłużej. Sprawdzaj kartę MicroSD raz na kilka tygodni.
